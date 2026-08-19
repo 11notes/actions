@@ -37,11 +37,13 @@ jobs:
 
       - name: build
         run: |
+          ACTION="${ACTION%/}/"
           for ACTION in ${{ inputs.action }}; do
             if [ -f "${ACTION}package.json" ]; then
               (
                 cd "${ACTION}"
                 npm ci
+                npm run prebuild
                 npm run build
               )
             fi

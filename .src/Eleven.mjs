@@ -1,6 +1,6 @@
 import { inspect } from 'node:util';
 import { info, warning, error, setFailed, notice, exportVariable, getInput } from '@actions/core';
-import { exec } from '@actions/exec';
+import * as _exec from '@actions/exec';
 
 class Eleven {
   static #instance = null;
@@ -77,7 +77,7 @@ class Eleven {
     };
 
     try {
-      await exec.exec(bin, arg, options);
+      await _exec.exec(bin, arg, options);
     } catch (e) {
       Eleven.warning(`exec [${bin}] exception: ${e}`);
       return false;

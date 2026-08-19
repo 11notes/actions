@@ -7,6 +7,7 @@ const Eleven = getEleven();
 export default class Action{
   #etc = {
     json:'./.json',
+    prefix:'ACTIONS_UPDATE',
   };
   #json = {};
 
@@ -14,7 +15,7 @@ export default class Action{
 
   constructor(){
     Eleven.info('class Action initialized', this.inputs);
-    Eleven.exportVariable('ACTION_UPDATE', false);
+    Eleven.exportVariable(this.#etc.prefix, false);
   }
 
   async run(){
@@ -23,14 +24,18 @@ export default class Action{
     if(await this.#latestTagExists()){
       Eleven.warning(`latest version exists already as a tag`);
     }else{
-      Eleven.info(`latest version does not exist as a tag yet`);
-      Eleven.exportVariable('ACTION_UPDATE', true);
-      Eleven.exportVariable('ACTION_UPDATE_BASE64JSON', Buffer.from(JSON.stringify({
+      const update = {
         version:this.inputs.latest,
         tag:`${await Eleven.exec('git', ['describe', '--abbrev=0', '--tags', await Eleven.exec('git', ['rev-list', '--tags', '--max-count=1'])])}`.replace('v', ''),
         unraid:this.#json?.unraid || false,
         nobody:this.#json?.nobody || false,
-      })).toString('base64'));
+      };
+      Eleven.info(`latest version does not exist as a tag yet`);
+      Eleven.exportVariable(this.#etc.prefix, true);
+      Eleven.exportVariable(`${this.#etc.prefix}_BASE64JSON`, Buffer.from(JSON.stringify(update)).toString('base64'));
+      for(const env in update){
+        Eleven.exportVariable(`${this.#etc.prefix}_${env}`.toUpperCase(), update[env]);
+      }
     }
   }
 

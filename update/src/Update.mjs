@@ -29,6 +29,7 @@ export default class Action{
     Eleven.info(`latest version is: ${this.inputs.latest}`);
     if(await this.#latestTagExists()){
       Eleven.warning(`latest version exists already as a tag`);
+      Eleven.exportVariable(`${this.#etc.prefix}_EXISTS`, true);
     }else{
       if(semverGt(this.inputs.latest, this.#json.semver.version)){
         Eleven.info(`latest version does not exist as a tag yet and is higher than existing version`);

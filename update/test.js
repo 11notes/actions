@@ -7,10 +7,10 @@ if(!existsSync(bundlePath)){
   process.exit(1);
 }
 
-process.env['DEBUG'] = true;
-process.env['INPUT_LATEST'] = '1.0.0';
-process.env['INPUT_VERBOSE'] = 'true';
-process.env['GITHUB_WORKSPACE'] = process.cwd();
+process.env.DEBUG = true;
+process.env.INPUT_LATEST = '1.0.0';
+process.env.INPUT_VERBOSE = 'true';
+process.env.GITHUB_WORKSPACE = process.cwd();
 
 console.log('testing github action ...');
 

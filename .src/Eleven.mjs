@@ -96,15 +96,8 @@ class Eleven {
 
   static getEleven() {
     if (!Eleven.#instance) {
-      Eleven.args = process.argv.slice(2);
-      if (
-        Array.isArray(Eleven.args) &&
-        Eleven.args.length > 0 &&
-        String(Eleven.args[0]).toLowerCase() === 'development'
-      ) {
-        Eleven.#debug = true;
-        Eleven.set('debug', true);
-      }
+      Eleven.#debug = process.env?.DEBUG;
+      Eleven.set('debug', process.env?.DEBUG);
       Eleven.#instance = Eleven;
     }
     return Eleven.#instance;

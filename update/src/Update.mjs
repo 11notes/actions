@@ -1,4 +1,4 @@
-import { getEleven } from '../../.src/Eleven.mjs';
+import getEleven from '../../.src/Eleven.mjs';
 import { readFileSync } from 'node:fs';
 import { Buffer } from 'node:buffer';
 

@@ -32,7 +32,7 @@ export default class Action{
       Eleven.exportVariable(`${this.#etc.prefix}_EXISTS`, true);
     }else{
       if(semver.gt(this.inputs.latest, this.#json.semver.version)){
-        Eleven.info(`latest version does not exist as a tag yet and is higher than existing version`);
+        Eleven.info(`latest version does not exist as a tag yet and is higher than existing version, update needed`);
         const update = {
           version:this.inputs.latest,
           tag:`${await Eleven.exec('git', ['describe', '--abbrev=0', '--tags', await Eleven.exec('git', ['rev-list', '--tags', '--max-count=1'])])}`.replace('v', ''),

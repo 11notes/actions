@@ -50,11 +50,9 @@ jobs:
               LEFT_PAD=$(printf '%*s' "$PADDING" "")
               RIGHT_PAD=$(printf '%*s' "$(( TOTAL_WIDTH - TEXT_LEN - PADDING ))" "")
               HEADER_LINE="║${LEFT_PAD}${ACTION_NAME}${RIGHT_PAD}║"
-              echo -en "${GREEN}"
-              echo -e "╔═════════════════════════════════════════════════════╗"
-              echo -e "${HEADER_LINE}"
-              echo -e "╚═════════════════════════════════════════════════════╝"
-              echo -en "\033[0m${NC}"
+              echo -e "${GREEN}╔═════════════════════════════════════════════════════╗${NC}"
+              echo -e "${GREEN}${HEADER_LINE}${NC}"
+              echo -e "${GREEN}╚═════════════════════════════════════════════════════╝${NC}"
               if ! (
                 cd "${ACTION_DIR}" &&
                 npm ci &&
@@ -65,6 +63,8 @@ jobs:
                 echo -e "${RED}❌ command failed in ${ACTION_DIR}, reverting build...${NC}"
                 git checkout HEAD -- "${ACTION_DIR}dist/" 2>/dev/null || true
                 git clean -fd "${ACTION_DIR}dist/" 2>/dev/null || true
+              else
+                echo -e "${GREEN}✅ build succeeded for ${ACTION_DIR}${NC}"
               fi
             fi
           done

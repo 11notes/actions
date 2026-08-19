@@ -8,6 +8,6 @@ import Action from './src/Update.mjs';
     throw new Error("action.verify() failed! Check your input variables.");
   }
 })().catch((err) => {
-  console.error(err.message);
+  console.error(err);
   process.exit(1);
 });

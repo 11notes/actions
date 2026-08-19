@@ -38,6 +38,20 @@ jobs:
           for ACTION in ${{ inputs.action }}; do
             ACTION_DIR="${ACTION%/}/"
             if [ -f "${ACTION_DIR}package.json" ]; then
+              ACTION_NAME="${ACTION%/}"
+              TOTAL_WIDTH=53
+              TEXT_LEN=${#ACTION_NAME}
+              PADDING=$(( (TOTAL_WIDTH - TEXT_LEN) / 2 ))
+              LEFT_PAD=$(printf '%*s' "$PADDING" "")
+              RIGHT_PAD=$(printf '%*s' "$(( TOTAL_WIDTH - TEXT_LEN - PADDING ))" "")
+              HEADER_LINE="║${LEFT_PAD}${ACTION_NAME}${RIGHT_PAD}║"
+              echo -en "\033[1;31m"
+              echo ""
+              echo "╔═════════════════════════════════════════════════════╗"
+              echo "${HEADER_LINE}"
+              echo "╚═════════════════════════════════════════════════════╝"
+              echo ""
+              echo -en "\033[0m"
               if ! (
                 cd "${ACTION_DIR}" &&
                 npm ci &&
@@ -46,8 +60,6 @@ jobs:
                 npm run test
               ); then
                 echo "❌ command failed in ${ACTION_DIR}, reverting build..."
-
-                # Cleanup runs at root level, so ${ACTION_DIR}dist/ is the correct path
                 git checkout HEAD -- "${ACTION_DIR}dist/" 2>/dev/null || true
                 git clean -fd "${ACTION_DIR}dist/" 2>/dev/null || true
               fi

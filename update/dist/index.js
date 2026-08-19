@@ -33918,15 +33918,8 @@ class Eleven {
 
   static getEleven() {
     if (!Eleven.#instance) {
-      Eleven.args = process.argv.slice(2);
-      if (
-        Array.isArray(Eleven.args) &&
-        Eleven.args.length > 0 &&
-        String(Eleven.args[0]).toLowerCase() === 'development'
-      ) {
-        Eleven.#debug = true;
-        Eleven.set('debug', true);
-      }
+      Eleven.#debug = process.env?.DEBUG;
+      Eleven.set('debug', process.env?.DEBUG);
       Eleven.#instance = Eleven;
     }
     return Eleven.#instance;
@@ -33997,7 +33990,7 @@ class Action{
       Update_Eleven.exportVariable(`${this.#etc.prefix}_EXISTS`, true);
     }else{
       if(semver.gt(this.inputs.latest, this.#json.semver.version)){
-        Update_Eleven.info(`latest version does not exist as a tag yet and is higher than existing version`);
+        Update_Eleven.info(`latest version does not exist as a tag yet and is higher than existing version, update needed`);
         const update = {
           version:this.inputs.latest,
           tag:`${await Update_Eleven.exec('git', ['describe', '--abbrev=0', '--tags', await Update_Eleven.exec('git', ['rev-list', '--tags', '--max-count=1'])])}`.replace('v', ''),

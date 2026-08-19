@@ -12,7 +12,7 @@ export default class Action{
   };
   #json = {};
 
-  inputs = {latest:Eleven.getInput('latest')};
+  inputs = {latest:Eleven.getInput('latest'), build:Eleven.getInput('build')};
 
   constructor(){
     Eleven.info('class Action initialized', this.inputs);
@@ -21,7 +21,7 @@ export default class Action{
 
   async verify(){
     const input = this.inputs.latest;
-    return Boolean(input && input.trim() !== '' && input.toLowerCase() !== 'null');
+    return(Boolean(input && input.trim() !== '' && input.toLowerCase() !== 'null'));
   }
 
   async run(){
@@ -39,6 +39,9 @@ export default class Action{
           unraid:this.#json?.unraid || false,
           nobody:this.#json?.nobody || false,
         };
+        if(null !== this.inputs.build){
+          update.build = this.inputs.build;
+        }
         Eleven.exportVariable(this.#etc.prefix, true);
         Eleven.exportVariable(`${this.#etc.prefix}_BASE64JSON`, Buffer.from(JSON.stringify(update)).toString('base64'));
         for(const env in update){

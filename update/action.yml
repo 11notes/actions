@@ -8,6 +8,9 @@ inputs:
   latest:
     description: 'latest semver of app'
     required: true
+  build:
+    description: 'latest build of app'
+    required: false
 runs:
   using: 'node24'
   main: 'dist/index.js'

@@ -31208,6 +31208,11 @@ class Action{
     Update_Eleven.exportVariable(this.#etc.prefix, false);
   }
 
+  async verify(){
+    const input = this.inputs.latest;
+    return(typeof input === 'string' && !/^(null|\s*)$/i.test(input));
+  }
+
   async run(){
     this.#getCurrentVersion();
     Update_Eleven.info(`latest version is: ${this.inputs.latest}`);
@@ -31261,7 +31266,11 @@ process
 (async()=>{
   try{
     const action = new Action();
-    await action.run();
+    if(await action.verify()){
+      await action.run();
+    }else{
+      index_Eleven.warning("action.verify() failed! check your input variables")
+    }
   }catch(e){
     index_Eleven.error(e);
   }

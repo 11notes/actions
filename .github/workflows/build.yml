@@ -34,5 +34,6 @@ jobs:
       - name: build
         run: |
           for ACTION in ${{ inputs.action }}; do
-            echo "${ACTION}"
+            cd ${ACTION}
+            npm run build
           done

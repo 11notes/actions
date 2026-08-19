@@ -214,6 +214,7 @@ const Update_Eleven = _src_Eleven();
 class Action{
   #etc = {
     json:'./.json',
+    prefix:'ACTIONS_UPDATE',
   };
   #json = {};
 
@@ -221,7 +222,7 @@ class Action{
 
   constructor(){
     Update_Eleven.info('class Action initialized', this.inputs);
-    Update_Eleven.exportVariable('ACTION_UPDATE', false);
+    Update_Eleven.exportVariable(this.#etc.prefix, false);
   }
 
   async run(){
@@ -230,14 +231,18 @@ class Action{
     if(await this.#latestTagExists()){
       Update_Eleven.warning(`latest version exists already as a tag`);
     }else{
-      Update_Eleven.info(`latest version does not exist as a tag yet`);
-      Update_Eleven.exportVariable('ACTION_UPDATE', true);
-      Update_Eleven.exportVariable('ACTION_UPDATE_BASE64JSON', external_node_buffer_namespaceObject.Buffer.from(JSON.stringify({
+      const update = {
         version:this.inputs.latest,
         tag:`${await Update_Eleven.exec('git', ['describe', '--abbrev=0', '--tags', await Update_Eleven.exec('git', ['rev-list', '--tags', '--max-count=1'])])}`.replace('v', ''),
         unraid:this.#json?.unraid || false,
         nobody:this.#json?.nobody || false,
-      })).toString('base64'));
+      };
+      Update_Eleven.info(`latest version does not exist as a tag yet`);
+      Update_Eleven.exportVariable(this.#etc.prefix, true);
+      Update_Eleven.exportVariable(`${this.#etc.prefix}_BASE64JSON`, external_node_buffer_namespaceObject.Buffer.from(JSON.stringify(update)).toString('base64'));
+      for(const env in update){
+        Update_Eleven.exportVariable(`${this.#etc.prefix}_${env}`.toUpperCase(), update[env]);
+      }
     }
   }
 

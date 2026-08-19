@@ -33800,7 +33800,7 @@ class Action{
   };
   #json = {};
 
-  inputs = {latest:Update_Eleven.getInput('latest')};
+  inputs = {latest:Update_Eleven.getInput('latest'), build:Update_Eleven.getInput('build')};
 
   constructor(){
     Update_Eleven.info('class Action initialized', this.inputs);
@@ -33809,7 +33809,7 @@ class Action{
 
   async verify(){
     const input = this.inputs.latest;
-    return Boolean(input && input.trim() !== '' && input.toLowerCase() !== 'null');
+    return(Boolean(input && input.trim() !== '' && input.toLowerCase() !== 'null'));
   }
 
   async run(){
@@ -33827,6 +33827,9 @@ class Action{
           unraid:this.#json?.unraid || false,
           nobody:this.#json?.nobody || false,
         };
+        if(null !== this.inputs.build){
+          update.build = this.inputs.build;
+        }
         Update_Eleven.exportVariable(this.#etc.prefix, true);
         Update_Eleven.exportVariable(`${this.#etc.prefix}_BASE64JSON`, external_node_buffer_.Buffer.from(JSON.stringify(update)).toString('base64'));
         for(const env in update){

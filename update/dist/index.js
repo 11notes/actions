@@ -33994,6 +33994,7 @@ class Action{
     Update_Eleven.info(`latest version is: ${this.inputs.latest}`);
     if(await this.#latestTagExists()){
       Update_Eleven.warning(`latest version exists already as a tag`);
+      Update_Eleven.exportVariable(`${this.#etc.prefix}_EXISTS`, true);
     }else{
       if((0,semver.semverGt)(this.inputs.latest, this.#json.semver.version)){
         Update_Eleven.info(`latest version does not exist as a tag yet and is higher than existing version`);

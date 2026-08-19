@@ -1,0 +1,38 @@
+name: build
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'action to build'
+        required: false
+        default: "*/"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: setup node
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version: '24'
+
+      - name: setup ncc
+        run: |
+          npm i -g @vercel/ncc
+
+      - name: build
+        run: |
+          for ACTION in ${{ inputs.action }}; do
+            echo "${ACTION}"
+          done

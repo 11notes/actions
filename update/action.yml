@@ -1,0 +1,13 @@
+name: 'action-org-update'
+author: '11notes'
+description: 'This action will check if a container image needs and update'
+branding:
+  icon: 'book-open'
+  color: 'blue'
+inputs:
+  latest:
+    description: 'latest semver of app'
+    required: true
+runs:
+  using: 'node24'
+  main: 'dist/index.js'

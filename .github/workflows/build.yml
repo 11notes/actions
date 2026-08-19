@@ -3,6 +3,10 @@ name: build
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
+defaults:
+  run:
+    shell: bash --noprofile --norc -eux {0}
+
 on:
   workflow_dispatch:
     inputs:

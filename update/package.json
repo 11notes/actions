@@ -2,7 +2,8 @@
   "name": "update",
   "scripts": {
     "prebuild": "cp -f ../.src/Eleven.mjs ./src/Eleven.mjs",
-    "build": "ncc build index.js -o dist --license licenses.txt --no-cache"
+    "build": "ncc build index.js -o dist --license licenses.txt --no-cache",
+    "test": "node test.js"
   },
   "dependencies": {
     "@actions/core": "^3.0.1",

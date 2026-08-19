@@ -42,9 +42,11 @@ jobs:
             if [ -f "${ACTION_DIR}package.json" ]; then
               (
                 cd "${ACTION_DIR}"
+                trap 'echo "build or test failed, reverting ..."; git checkout HEAD -- "'${ACTION_DIR}'dist"' 2>/dev/null || true
                 npm ci
                 npm run prebuild
                 npm run build
+                npm run test
               )
             fi
           done

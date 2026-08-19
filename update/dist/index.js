@@ -31210,7 +31210,7 @@ class Action{
 
   async verify(){
     const input = this.inputs.latest;
-    return(typeof input === 'string' && !/^(null|\s*)$/i.test(input));
+    return Boolean(input && input.trim() !== '' && input.toLowerCase() !== 'null');
   }
 
   async run(){

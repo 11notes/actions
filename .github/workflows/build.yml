@@ -5,7 +5,7 @@ env:
 
 defaults:
   run:
-    shell: bash --noprofile --norc -eux {0}
+    shell: bash --noprofile --norc -eu {0}
 
 on:
   workflow_dispatch:

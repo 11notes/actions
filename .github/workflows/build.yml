@@ -38,20 +38,19 @@ jobs:
           for ACTION in ${{ inputs.action }}; do
             ACTION_DIR="${ACTION%/}/"
             if [ -f "${ACTION_DIR}package.json" ]; then
-              (
-                cd "${ACTION_DIR}"
-
-                trap '
-                  echo "❌ command failed in ${ACTION_DIR}, reverting build ..."
-                  git checkout HEAD -- ${ACTION_DIR}dist/ 2>/dev/null || true
-                  git clean -fd ${ACTION_DIR}dist/ 2>/dev/null || true
-                ' ERR
-
-                npm ci
-                npm run prebuild
-                npm run build
+              if ! (
+                cd "${ACTION_DIR}" &&
+                npm ci &&
+                npm run prebuild &&
+                npm run build &&
                 npm run test
-              ) || echo "⚠️ building action ${ACTION%/} failed, skipping"
+              ); then
+                echo "❌ command failed in ${ACTION_DIR}, reverting build..."
+
+                # Cleanup runs at root level, so ${ACTION_DIR}dist/ is the correct path
+                git checkout HEAD -- "${ACTION_DIR}dist/" 2>/dev/null || true
+                git clean -fd "${ACTION_DIR}dist/" 2>/dev/null || true
+              fi
             fi
           done
 

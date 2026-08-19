@@ -1,6 +1,2 @@
 # default
-maintain/
 node_modules/
-
-# custom
-.json

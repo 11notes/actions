@@ -33975,6 +33975,9 @@ class Action{
   constructor(){
     Update_Eleven.info('class Action initialized', this.inputs);
     Update_Eleven.exportVariable(this.#etc.prefix, false);
+    console.log(this.variableDoesNotExistFail);
+    const a = null;
+    console.log(a[12]);
   }
 
   async verify(){

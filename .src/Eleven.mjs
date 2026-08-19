@@ -1,133 +1,135 @@
 import { inspect } from 'node:util';
-import { info, warning, error, setFailed, notice, exportVariable, getInput } from '@actions/core';
-import { exec } from '@actions/exec';
+import * as core from '@actions/core';
+import * as execAction from '@actions/exec';
 
-class Eleven{
+class Eleven {
   static #instance = null;
-  static arguments = [];
+  static args = [];
 
   static #debug = false;
   static #config = {
-    verbose:false,
+    verbose: false,
   };
 
-  static set(x, v){
+  static set(x, v) {
     Eleven.#config[x] = v;
     Eleven.debug(`Eleven.set(${x}, ${v})`);
   }
 
-  static get(x){
-    return(Eleven.#config[x]);
+  static get(x) {
+    return Eleven.#config[x];
   }
 
-  static environment(e){
-    switch(true){
-      case /development|dev/ig.test(e):
-        Eleven.#debug = true;
-        Eleven.set('debug', true);
-        break;
+  static environment(e) {
+    if (/development|dev/gi.test(e)) {
+      Eleven.#debug = true;
+      Eleven.set('debug', true);
     }
   }
 
-  static debug(){
-    if(Eleven.#debug){
-      info(Eleven.#argumentsToPrintableString.apply(Eleven, arguments));
+  static debug(...args) {
+    if (Eleven.#debug) {
+      core.info(Eleven.#argumentsToPrintableString(...args));
     }
   }
 
-  static info(){
-    info(Eleven.#argumentsToPrintableString.apply(Eleven, arguments));
+  static info(...args) {
+    core.info(Eleven.#argumentsToPrintableString(...args));
   }
 
-  static warning(){
-    warning(Eleven.#argumentsToPrintableString.apply(Eleven, arguments));
+  static warning(...args) {
+    core.warning(Eleven.#argumentsToPrintableString(...args));
   }
 
-  static error(){
-    error(Eleven.#argumentsToPrintableString.apply(Eleven, arguments));
+  static error(...args) {
+    core.error(Eleven.#argumentsToPrintableString(...args));
   }
 
-  static fail(){
-    setFailed(Eleven.#argumentsToPrintableString.apply(Eleven, arguments));
+  static fail(...args) {
+    core.setFailed(Eleven.#argumentsToPrintableString(...args));
   }
 
-  static notice(){
-    notice(Eleven.#argumentsToPrintableString.apply(Eleven, arguments));
+  static notice(...args) {
+    core.notice(Eleven.#argumentsToPrintableString(...args));
   }
 
-  static exportVariable(n, v){
-    exportVariable(n, `${v}`);
+  static exportVariable(n, v) {
+    core.exportVariable(n, `${v}`);
   }
 
-  static getInput(v){
-    return(getInput(v) || null);
+  static getInput(v) {
+    return core.getInput(v) || null;
   }
 
-  static async exec(bin, arg=[], stripCRLF=true){
+  static async exec(bin, arg = [], stripCRLF = true) {
     let stdout = '';
     let stderr = '';
 
     const options = {
-      listeners:{
-        stdout:(data) => {
+      listeners: {
+        stdout: (data) => {
           stdout += data.toString();
         },
-        stderr:(data) => {
+        stderr: (data) => {
           stderr += data.toString();
-        }
-      }
+        },
+      },
     };
 
-    try{
-      await exec.exec(bin, arg, options);
-    }catch(e){
+    try {
+      await execAction.exec(bin, arg, options);
+    } catch (e) {
       Eleven.warning(`exec [${bin}] exception: ${e}`);
-      return(false);
+      return false;
     }
-    if(stderr.length > 0){
+
+    if (stderr.length > 0) {
       Eleven.warning(`exec [${bin}] exited with error: ${stderr}`);
-      return(false);
+      return false;
     }
-    if(stripCRLF){
+
+    if (stripCRLF) {
       stdout = stdout.replace(/[\r\n]*/g, '');
     }
-    return(stdout);
+    return stdout;
   }
 
-  static getEleven(){
-    if(!Eleven.#instance){
-      Eleven.arguments = process.argv.slice(2);
-      if(Array.isArray(Eleven.arguments) && Eleven.arguments.length > 0 && String(Eleven.arguments[0]).toLowerCase() === 'development'){
+  static getEleven() {
+    if (!Eleven.#instance) {
+      Eleven.args = process.argv.slice(2);
+      if (
+        Array.isArray(Eleven.args) &&
+        Eleven.args.length > 0 &&
+        String(Eleven.args[0]).toLowerCase() === 'development'
+      ) {
         Eleven.#debug = true;
         Eleven.set('debug', true);
       }
       Eleven.#instance = Eleven;
     }
-    return(Eleven.#instance);
+    return Eleven.#instance;
   }
 
-  static #stdoutms(ms){
-    switch(String(ms).length){
-      case 0: return('000');
-      case 1: return(`00${ms}`);
-      case 2: return(`0${ms}`);
-      default: return(ms);
+  static #stdoutms(ms) {
+    const s = String(ms);
+    switch (s.length) {
+      case 0: return '000';
+      case 1: return `00${s}`;
+      case 2: return `0${s}`;
+      default: return s;
     }
   }
 
-  static #argumentsToPrintableString(){
-    const a = [];
-    const at = `${new Date().toLocaleString('de-CH', {timeZone:'Europe/Zurich'}).split(', ')[1]}.${Eleven.#stdoutms(new Date().getMilliseconds())}`;
-    for(const i in arguments){
-      a.push([
-        at,
-        (typeof(arguments[i]) === 'string' || typeof(arguments[i]) === 'number')
-          ? arguments[i]
-          : inspect(arguments[i]
-        ,{showHidden:false, depth:null, colors:true}),
-      ].join('   '));
-    }
-    return(a.join("\r\n"));
+  static #argumentsToPrintableString(...args) {
+    const at = `${new Date().toLocaleString('de-CH', { timeZone: 'Europe/Zurich' }).split(', ')[1]}.${Eleven.#stdoutms(new Date().getMilliseconds())}`;
+    return args
+      .map((item) => {
+        const val = typeof item === 'string' || typeof item === 'number'
+          ? item
+          : inspect(item, { showHidden: false, depth: null, colors: true });
+        return `${at}   ${val}`;
+      })
+      .join('\r\n');
   }
 }
 

@@ -13,7 +13,11 @@ process
 (async()=>{
   try{
     const action = new Action();
-    await action.run();
+    if(await action.verify()){
+      await action.run();
+    }else{
+      Eleven.warning("action.verify() failed! check your input variables")
+    }
   }catch(e){
     Eleven.error(e);
   }

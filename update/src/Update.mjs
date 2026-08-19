@@ -18,6 +18,11 @@ export default class Action{
     Eleven.exportVariable(this.#etc.prefix, false);
   }
 
+  async verify(){
+    const input = this.inputs.latest;
+    return(typeof input === 'string' && !/^(null|\s*)$/i.test(input));
+  }
+
   async run(){
     this.#getCurrentVersion();
     Eleven.info(`latest version is: ${this.inputs.latest}`);

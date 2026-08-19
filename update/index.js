@@ -2,6 +2,8 @@ import getEleven from './src/Eleven.mjs';
 import Action from './src/Update.mjs';
 const Eleven = getEleven();
 
+console.log("mistakes were meade)
+
 process
   .on('unhandledRejection', (reason, p) => {
     Eleven.warning('unhandledRejection', reason, p);

@@ -1,5 +1,5 @@
-import { createRequire as __WEBPACK_EXTERNAL_createRequire } from "module";
-/******/ var __webpack_modules__ = ({
+/******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
 
 /***/ 344:
 /***/ ((module) => {
@@ -17,47 +17,50 @@ module.exports = eval("require")("@actions/exec");
 
 /***/ })
 
-/******/ });
+/******/ 	});
 /************************************************************************/
-/******/ // The module cache
-/******/ var __webpack_module_cache__ = {};
-/******/ 
-/******/ // The require function
-/******/ function __nccwpck_require__(moduleId) {
-/******/ 	// Check if module is in cache
-/******/ 	var cachedModule = __webpack_module_cache__[moduleId];
-/******/ 	if (cachedModule !== undefined) {
-/******/ 		return cachedModule.exports;
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __nccwpck_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		var threw = true;
+/******/ 		try {
+/******/ 			__webpack_modules__[moduleId](module, module.exports, __nccwpck_require__);
+/******/ 			threw = false;
+/******/ 		} finally {
+/******/ 			if(threw) delete __webpack_module_cache__[moduleId];
+/******/ 		}
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
 /******/ 	}
-/******/ 	// Create a new module (and put it into the cache)
-/******/ 	var module = __webpack_module_cache__[moduleId] = {
-/******/ 		// no module.id needed
-/******/ 		// no module.loaded needed
-/******/ 		exports: {}
-/******/ 	};
-/******/ 
-/******/ 	// Execute the module function
-/******/ 	var threw = true;
-/******/ 	try {
-/******/ 		__webpack_modules__[moduleId](module, module.exports, __nccwpck_require__);
-/******/ 		threw = false;
-/******/ 	} finally {
-/******/ 		if(threw) delete __webpack_module_cache__[moduleId];
-/******/ 	}
-/******/ 
-/******/ 	// Return the exports of the module
-/******/ 	return module.exports;
-/******/ }
-/******/ 
+/******/ 	
 /************************************************************************/
-/******/ /* webpack/runtime/asset-relocator-loader */
-/******/ if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = decodeURIComponent(new URL('.', import.meta.url).pathname).slice(import.meta.url.match(/^file:\/\/\/\w:/) ? 1 : 0, -1) + "/";
-/******/ 
+/******/ 	/* webpack/runtime/asset-relocator-loader */
+/******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
+/******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+(() => {
+"use strict";
 
 ;// CONCATENATED MODULE: external "node:util"
-const external_node_util_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:util");
+const external_node_util_namespaceObject = require("node:util");
 // EXTERNAL MODULE: ../../../../../../opt/hostedtoolcache/node/24.19.0/x64/lib/node_modules/@vercel/ncc/dist/ncc/@@notfound.js?@actions/core
 var core = __nccwpck_require__(344);
 // EXTERNAL MODULE: ../../../../../../opt/hostedtoolcache/node/24.19.0/x64/lib/node_modules/@vercel/ncc/dist/ncc/@@notfound.js?@actions/exec
@@ -96,36 +99,36 @@ class Eleven{
 
   static debug(){
     if(Eleven.#debug){
-      core.info(Eleven.#argumentsToPrintableString.apply(Eleven, arguments));
+      (0,core.info)(Eleven.#argumentsToPrintableString.apply(Eleven, arguments));
     }
   }
 
   static info(){
-    core.info(Eleven.#argumentsToPrintableString.apply(Eleven, arguments));
+    (0,core.info)(Eleven.#argumentsToPrintableString.apply(Eleven, arguments));
   }
 
   static warning(){
-    core.warning(Eleven.#argumentsToPrintableString.apply(Eleven, arguments));
+    (0,core.warning)(Eleven.#argumentsToPrintableString.apply(Eleven, arguments));
   }
 
   static error(){
-    core.error(Eleven.#argumentsToPrintableString.apply(Eleven, arguments));
+    (0,core.error)(Eleven.#argumentsToPrintableString.apply(Eleven, arguments));
   }
 
   static fail(){
-    core.setFailed(Eleven.#argumentsToPrintableString.apply(Eleven, arguments));
+    (0,core.setFailed)(Eleven.#argumentsToPrintableString.apply(Eleven, arguments));
   }
 
   static notice(){
-    core.notice(Eleven.#argumentsToPrintableString.apply(Eleven, arguments));
+    (0,core.notice)(Eleven.#argumentsToPrintableString.apply(Eleven, arguments));
   }
 
   static exportVariable(n, v){
-    core.exportVariable(n, `${v}`);
+    (0,core.exportVariable)(n, `${v}`);
   }
 
   static getInput(v){
-    return(core.getInput(v) || null);
+    return((0,core.getInput)(v) || null);
   }
 
   static async exec(bin, arg=[], stripCRLF=true){
@@ -144,7 +147,7 @@ class Eleven{
     };
 
     try{
-      await exec.exec(bin, arg, options);
+      await exec.exec.exec(bin, arg, options);
     }catch(e){
       Eleven.warning(`exec [${bin}] exception: ${e}`);
       return(false);
@@ -198,9 +201,9 @@ class Eleven{
 
 /* harmony default export */ const _src_Eleven = (Eleven.getEleven);
 ;// CONCATENATED MODULE: external "node:fs"
-const external_node_fs_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:fs");
+const external_node_fs_namespaceObject = require("node:fs");
 ;// CONCATENATED MODULE: external "node:buffer"
-const external_node_buffer_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:buffer");
+const external_node_buffer_namespaceObject = require("node:buffer");
 ;// CONCATENATED MODULE: ./src/Update.mjs
 
 
@@ -280,3 +283,8 @@ process
     index_Eleven.error(e);
   }
 })();
+})();
+
+module.exports = __webpack_exports__;
+/******/ })()
+;

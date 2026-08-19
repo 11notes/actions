@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { Buffer } from 'node:buffer';
 import getEleven from './Eleven.mjs';
+import { semverGt } from 'semver';
 
 const Eleven = getEleven();
 
@@ -29,17 +30,21 @@ export default class Action{
     if(await this.#latestTagExists()){
       Eleven.warning(`latest version exists already as a tag`);
     }else{
-      const update = {
-        version:this.inputs.latest,
-        tag:`${await Eleven.exec('git', ['describe', '--abbrev=0', '--tags', await Eleven.exec('git', ['rev-list', '--tags', '--max-count=1'])])}`.replace('v', ''),
-        unraid:this.#json?.unraid || false,
-        nobody:this.#json?.nobody || false,
-      };
-      Eleven.info(`latest version does not exist as a tag yet`);
-      Eleven.exportVariable(this.#etc.prefix, true);
-      Eleven.exportVariable(`${this.#etc.prefix}_BASE64JSON`, Buffer.from(JSON.stringify(update)).toString('base64'));
-      for(const env in update){
-        Eleven.exportVariable(`${this.#etc.prefix}_${env}`.toUpperCase(), update[env]);
+      if(semverGt(this.inputs.latest, this.#json.semver.version)){
+        Eleven.info(`latest version does not exist as a tag yet and is higher than existing version`);
+        const update = {
+          version:this.inputs.latest,
+          tag:`${await Eleven.exec('git', ['describe', '--abbrev=0', '--tags', await Eleven.exec('git', ['rev-list', '--tags', '--max-count=1'])])}`.replace('v', ''),
+          unraid:this.#json?.unraid || false,
+          nobody:this.#json?.nobody || false,
+        };
+        Eleven.exportVariable(this.#etc.prefix, true);
+        Eleven.exportVariable(`${this.#etc.prefix}_BASE64JSON`, Buffer.from(JSON.stringify(update)).toString('base64'));
+        for(const env in update){
+          Eleven.exportVariable(`${this.#etc.prefix}_${env}`.toUpperCase(), update[env]);
+        }
+      }else{
+        Eleven.warning(`latest version does not exist as a tag yet but is lower than the existing version, skipping`);
       }
     }
   }

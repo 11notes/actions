@@ -1,5 +1,6 @@
 {
   "name": "update",
+  "type": "module",
   "scripts": {
     "prebuild": "cp -f ../.src/Eleven.mjs ./src/Eleven.mjs",
     "build": "ncc build index.js -o dist --license licenses.txt --no-cache",

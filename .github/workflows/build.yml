@@ -35,6 +35,11 @@ jobs:
 
       - name: build
         run: |
+          RED='\033[0;31m'
+          GREEN='\033[0;32m'
+          YELLOW='\033[1;33m'
+          NC='\033[0m'
+
           for ACTION in ${{ inputs.action }}; do
             ACTION_DIR="${ACTION%/}/"
             if [ -f "${ACTION_DIR}package.json" ]; then
@@ -45,13 +50,11 @@ jobs:
               LEFT_PAD=$(printf '%*s' "$PADDING" "")
               RIGHT_PAD=$(printf '%*s' "$(( TOTAL_WIDTH - TEXT_LEN - PADDING ))" "")
               HEADER_LINE="║${LEFT_PAD}${ACTION_NAME}${RIGHT_PAD}║"
-              echo -en "\033[1;31m"
-              echo ""
-              echo "╔═════════════════════════════════════════════════════╗"
-              echo "${HEADER_LINE}"
-              echo "╚═════════════════════════════════════════════════════╝"
-              echo ""
-              echo -en "\033[0m"
+              echo -en "${GREEN}"
+              echo -e "╔═════════════════════════════════════════════════════╗"
+              echo -e "${HEADER_LINE}"
+              echo -e "╚═════════════════════════════════════════════════════╝"
+              echo -en "\033[0m${NC}"
               if ! (
                 cd "${ACTION_DIR}" &&
                 npm ci &&
@@ -59,7 +62,7 @@ jobs:
                 npm run build &&
                 npm run test
               ); then
-                echo "❌ command failed in ${ACTION_DIR}, reverting build..."
+                echo -e "${RED}❌ command failed in ${ACTION_DIR}, reverting build...${NC}"
                 git checkout HEAD -- "${ACTION_DIR}dist/" 2>/dev/null || true
                 git clean -fd "${ACTION_DIR}dist/" 2>/dev/null || true
               fi

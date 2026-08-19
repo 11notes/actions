@@ -39,7 +39,7 @@ jobs:
         run: |
           for ACTION in ${{ inputs.action }}; do
             cd ${ACTION}
-            npm i
+            npm ci
             npm run build
           done
 

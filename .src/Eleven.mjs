@@ -1,6 +1,6 @@
 import { inspect } from 'node:util';
-import * as core from '@actions/core';
-import * as execAction from '@actions/exec';
+import { info, warning, error, setFailed, notice, exportVariable, getInput } from '@actions/core';
+import { exec } from '@actions/exec';
 
 class Eleven {
   static #instance = null;
@@ -29,36 +29,36 @@ class Eleven {
 
   static debug(...args) {
     if (Eleven.#debug) {
-      core.info(Eleven.#argumentsToPrintableString(...args));
+      info(Eleven.#argumentsToPrintableString(...args));
     }
   }
 
   static info(...args) {
-    core.info(Eleven.#argumentsToPrintableString(...args));
+    info(Eleven.#argumentsToPrintableString(...args));
   }
 
   static warning(...args) {
-    core.warning(Eleven.#argumentsToPrintableString(...args));
+    warning(Eleven.#argumentsToPrintableString(...args));
   }
 
   static error(...args) {
-    core.error(Eleven.#argumentsToPrintableString(...args));
+    error(Eleven.#argumentsToPrintableString(...args));
   }
 
   static fail(...args) {
-    core.setFailed(Eleven.#argumentsToPrintableString(...args));
+    setFailed(Eleven.#argumentsToPrintableString(...args));
   }
 
   static notice(...args) {
-    core.notice(Eleven.#argumentsToPrintableString(...args));
+    notice(Eleven.#argumentsToPrintableString(...args));
   }
 
   static exportVariable(n, v) {
-    core.exportVariable(n, `${v}`);
+    exportVariable(n, `${v}`);
   }
 
   static getInput(v) {
-    return core.getInput(v) || null;
+    return getInput(v) || null;
   }
 
   static async exec(bin, arg = [], stripCRLF = true) {
@@ -77,7 +77,7 @@ class Eleven {
     };
 
     try {
-      await execAction.exec(bin, arg, options);
+      await exec.exec(bin, arg, options);
     } catch (e) {
       Eleven.warning(`exec [${bin}] exception: ${e}`);
       return false;

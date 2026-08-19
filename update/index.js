@@ -1,4 +1,4 @@
-import getEleven from '../.src/Eleven.mjs';
+import getEleven from './src/Eleven.mjs';
 import Action from './src/Update.mjs';
 const Eleven = getEleven();
 

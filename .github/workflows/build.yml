@@ -38,9 +38,13 @@ jobs:
       - name: build
         run: |
           for ACTION in ${{ inputs.action }}; do
-            cd ${ACTION}
-            npm ci
-            npm run build
+            if [ -f "${ACTION}package.json" ]; then
+              (
+                cd "${ACTION}"
+                npm ci
+                npm run build
+              )
+            fi
           done
 
       - name: commit

@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { Buffer } from 'node:buffer';
 import getEleven from './Eleven.mjs';
-import { semverGt } from 'semver';
+import semver from 'semver';
 
 const Eleven = getEleven();
 
@@ -31,7 +31,7 @@ export default class Action{
       Eleven.warning(`latest version exists already as a tag`);
       Eleven.exportVariable(`${this.#etc.prefix}_EXISTS`, true);
     }else{
-      if(semverGt(this.inputs.latest, this.#json.semver.version)){
+      if(semver.gt(this.inputs.latest, this.#json.semver.version)){
         Eleven.info(`latest version does not exist as a tag yet and is higher than existing version`);
         const update = {
           version:this.inputs.latest,

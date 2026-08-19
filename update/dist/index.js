@@ -31126,7 +31126,7 @@ class Eleven {
     };
 
     try {
-      await exec_exec.exec(bin, arg, options);
+      await exec_exec(bin, arg, options);
     } catch (e) {
       Eleven.warning(`exec [${bin}] exception: ${e}`);
       return false;

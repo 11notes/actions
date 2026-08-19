@@ -1,6 +1,6 @@
-import getEleven from 'Eleven.mjs';
 import { readFileSync } from 'node:fs';
 import { Buffer } from 'node:buffer';
+import getEleven from './Eleven.mjs';
 
 const Eleven = getEleven();
 

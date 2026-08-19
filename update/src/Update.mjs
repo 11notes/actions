@@ -17,9 +17,6 @@ export default class Action{
   constructor(){
     Eleven.info('class Action initialized', this.inputs);
     Eleven.exportVariable(this.#etc.prefix, false);
-    console.log(this.variableDoesNotExistFail);
-    const a = null;
-    console.log(a[12]);
   }
 
   async verify(){

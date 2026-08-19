@@ -1,12 +1,13 @@
-import getEleven from './src/Eleven.mjs';
 import Action from './src/Update.mjs';
-const Eleven = getEleven();
 
-(async()=>{
+(async() => {
   const action = new Action();
   if(await action.verify()){
     await action.run();
   }else{
-    Eleven.warning("action.verify() failed! check your input variables")
+    throw new Error("action.verify() failed! Check your input variables.");
   }
-})();
+})().catch((err) => {
+  console.error(err.message);
+  process.exit(1);
+});

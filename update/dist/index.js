@@ -33835,6 +33835,7 @@ class Action{
         for(const env in update){
           Update_Eleven.exportVariable(`${this.#etc.prefix}_${env}`.toUpperCase(), update[env]);
         }
+        Update_Eleven.info(update);
       }else{
         Update_Eleven.warning(`latest version does not exist as a tag yet but is lower than the existing version, skipping`);
       }

@@ -12,7 +12,7 @@ export default class Action{
   };
   #json = {};
 
-  inputs = {latest:Eleven.getInput('latest'), build:Eleven.getInput('build')};
+  inputs = {latest:Eleven.getInput('latest'), build:Eleven.getInput('build'), force:Eleven.getInput('force')};
 
   constructor(){
     Eleven.info('class Action initialized', this.inputs);
@@ -27,11 +27,11 @@ export default class Action{
   async run(){
     this.#getCurrentVersion();
     Eleven.info(`latest version is: ${this.inputs.latest}`);
-    if(await this.#latestTagExists()){
+    if(!this.inputs.force && await this.#latestTagExists()){
       Eleven.warning(`latest version exists already as a tag`);
       Eleven.exportVariable(`${this.#etc.prefix}_EXISTS`, true);
     }else{
-      if(semver.gt(this.inputs.latest, this.#json.semver.version)){
+      if(this.inputs.force || semver.gt(this.inputs.latest, this.#json.semver.version)){
         Eleven.info(`latest version does not exist as a tag yet and is higher than existing version, update needed`);
         const update = {
           version:this.inputs.latest,

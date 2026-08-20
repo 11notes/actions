@@ -11,6 +11,9 @@ inputs:
   build:
     description: 'latest build of app'
     required: false
+  force:
+    description: 'force update'
+    required: false
 runs:
   using: 'node24'
   main: 'dist/index.js'

@@ -57,8 +57,9 @@ class Eleven {
     exportVariable(n, `${v}`);
   }
 
-  static getInput(v) {
-    return getInput(v) || null;
+  static getInput(v, f = null) {
+    const input = getInput(v);
+    return(input.trim() !== '' ? input : f);
   }
 
   static async exec(bin, arg = [], stripCRLF = true) {

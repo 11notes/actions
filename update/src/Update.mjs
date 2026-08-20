@@ -12,7 +12,7 @@ export default class Action{
   };
   #json = {};
 
-  inputs = {latest:Eleven.getInput('latest'), build:Eleven.getInput('build'), force:Eleven.getInput('force')};
+  inputs = {latest:Eleven.getInput('latest'), build:Eleven.getInput('build'), force:Eleven.getInput('force', false)};
 
   constructor(){
     Eleven.info('class Action initialized', this.inputs);

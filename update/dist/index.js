@@ -33713,8 +33713,9 @@ class Eleven {
     exportVariable(n, `${v}`);
   }
 
-  static getInput(v) {
-    return getInput(v) || null;
+  static getInput(v, f = null) {
+    const input = getInput(v);
+    return(input.trim() !== '' ? input : f);
   }
 
   static async exec(bin, arg = [], stripCRLF = true) {
@@ -33800,7 +33801,7 @@ class Action{
   };
   #json = {};
 
-  inputs = {latest:Update_Eleven.getInput('latest'), build:Update_Eleven.getInput('build')};
+  inputs = {latest:Update_Eleven.getInput('latest'), build:Update_Eleven.getInput('build'), force:Update_Eleven.getInput('force', false)};
 
   constructor(){
     Update_Eleven.info('class Action initialized', this.inputs);
@@ -33815,11 +33816,11 @@ class Action{
   async run(){
     this.#getCurrentVersion();
     Update_Eleven.info(`latest version is: ${this.inputs.latest}`);
-    if(await this.#latestTagExists()){
+    if(!this.inputs.force && await this.#latestTagExists()){
       Update_Eleven.warning(`latest version exists already as a tag`);
       Update_Eleven.exportVariable(`${this.#etc.prefix}_EXISTS`, true);
     }else{
-      if(semver.gt(this.inputs.latest, this.#json.semver.version)){
+      if(this.inputs.force || semver.gt(this.inputs.latest, this.#json.semver.version)){
         Update_Eleven.info(`latest version does not exist as a tag yet and is higher than existing version, update needed`);
         const update = {
           version:this.inputs.latest,

@@ -1,0 +1,14 @@
+{
+  "name": "version",
+  "type": "module",
+  "scripts": {
+    "prebuild": "cp -f ../.src/Eleven.mjs ./src/Eleven.mjs > /dev/null",
+    "build": "ncc build index.js -o dist --license licenses.txt --no-cache > /dev/null",
+    "test": "node test.js"
+  },
+  "dependencies": {
+    "@actions/core": "^3.0.1",
+    "@actions/exec": "^3.0.0",
+    "semver": "^7.8.0"
+  }
+}

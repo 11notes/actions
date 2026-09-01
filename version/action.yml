@@ -1,0 +1,13 @@
+name: 'version'
+author: '11notes'
+description: 'This action will build the version from input'
+branding:
+  icon: 'book-open'
+  color: 'blue'
+inputs:
+  version:
+    description: 'semver to build'
+    required: true
+runs:
+  using: 'node24'
+  main: 'dist/index.js'

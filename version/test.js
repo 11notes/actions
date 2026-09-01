@@ -10,6 +10,7 @@ import { resolve } from 'node:path';
 
   process.env.DEBUG = true;
   process.env.GITHUB_WORKSPACE = process.cwd();
+  process.env.INPUT_VERSION = '1.0.0';
 
   await import(bundlePath);
 })();

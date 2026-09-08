@@ -12,7 +12,7 @@ export default class Action{
   };
   #json = {};
 
-  inputs = {latest:Eleven.getInput('latest'), build:Eleven.getInput('build'), force:Eleven.getInput('force', false)};
+  inputs = {latest:Eleven.getInput('latest'), build:Eleven.getInput('build'), force:Eleven.getInput('force', false), etc:Eleven.getInput('etc', false)};
 
   constructor(){
     Eleven.info('class Action initialized', this.inputs);
@@ -21,6 +21,13 @@ export default class Action{
 
   async verify(){
     const input = this.inputs.latest;
+    if(this.inputs.etc){
+      try{
+        this.inputs.etc = JSON.parse(this.inputs.etc);
+      }catch(e){
+        this.inputs.etc = false;
+      }
+    }
     return(Boolean(input && input.trim() !== '' && input.toLowerCase() !== 'null'));
   }
 
@@ -33,7 +40,7 @@ export default class Action{
     }else{
       if(this.inputs.force || semver.gt(this.inputs.latest, this.#json.semver.version)){
         Eleven.info(`latest version does not exist as a tag yet and is higher than existing version, update needed`);
-        const update = {
+        let update = {
           version:this.inputs.latest,
           tag:`${await Eleven.exec('git', ['describe', '--abbrev=0', '--tags', await Eleven.exec('git', ['rev-list', '--tags', '--max-count=1'])])}`.replace('v', ''),
           unraid:this.#json?.unraid || false,
@@ -41,6 +48,9 @@ export default class Action{
         };
         if(null !== this.inputs.build){
           update.build = this.inputs.build;
+        }
+        if(this.inputs.etc){
+          update = {...update, ...this.inputs.etc};
         }
         Eleven.exportVariable(this.#etc.prefix, true);
         Eleven.exportVariable(`${this.#etc.prefix}_BASE64JSON`, Buffer.from(JSON.stringify(update)).toString('base64'));

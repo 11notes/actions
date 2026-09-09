@@ -4,6 +4,10 @@ description: 'This action will build the image on tag push'
 branding:
   icon: 'book-open'
   color: 'blue'
+inputs:
+  etc:
+    description: 'JSON string of additional properties to be added to BASE64'
+    required: false
 runs:
   using: 'node24'
   main: 'dist/index.js'

@@ -10,23 +10,34 @@ export default class Action{
     prefix:'ACTIONS_TAG',
   };
   #json = {};
-  #inputs = {};
+  #inputs = {etc:Eleven.getInput('etc', false)};
 
   constructor(){
     Eleven.info('class Action initialized', this.#inputs);
   }
 
   async verify(){
+    if(this.#inputs.etc){
+      try{
+        this.#inputs.etc = JSON.parse(this.#inputs.etc);
+      }catch(e){
+        this.#inputs.etc = false;
+      }
+    }
     return(true);
   }
 
   async run(){
     this.#loadJson();
 
-    const tag = {
+    let tag = {
       unraid:this.#json?.unraid || false,
       nobody:this.#json?.nobody || false,
     };
+
+    if(this.#inputs.etc){
+      tag = {...tag, ...this.#inputs.etc};
+    }
 
     Eleven.exportVariable(`${this.#etc.prefix}_BASE64JSON`, Buffer.from(JSON.stringify(tag)).toString('base64'));
     for(const env in tag){

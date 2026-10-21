@@ -25,7 +25,7 @@ export default class Action{
     this.#loadJson();
 
     const version = {
-      version:this.#inputs.version,
+      version:(/^latest$/i.exec(this.#inputs.version)) ? this.#json.semver.version : this.#inputs.version,
       semver:{
         disable:{
           rolling:true

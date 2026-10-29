@@ -33813,6 +33813,9 @@ class Action{
     if(this.#inputs.etc){
       try{
         this.#inputs.etc = JSON.parse(this.#inputs.etc);
+        if(this.#inputs.etc?.force){
+          this.#inputs.force = this.#inputs.force;
+        }
       }catch(e){
         this.#inputs.etc = false;
       }

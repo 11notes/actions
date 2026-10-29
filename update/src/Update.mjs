@@ -34,13 +34,14 @@ export default class Action{
   async run(){
     this.#getCurrentVersion();
     Eleven.info(`latest version is: ${this.#inputs.latest}`);
+    let update = {};
     if(!this.#inputs.force && await this.#latestTagExists()){
       Eleven.warning(`latest version exists already as a tag`);
       Eleven.exportVariable(`${this.#etc.prefix}_EXISTS`, true);
     }else{
       if(this.#inputs.force || semver.gt(this.#inputs.latest, this.#json.semver.version)){
         Eleven.info(`latest version does not exist as a tag yet and is higher than existing version, update needed`);
-        let update = {
+        update = {
           version:this.#inputs.latest,
           tag:`${await Eleven.exec('git', ['describe', '--abbrev=0', '--tags', await Eleven.exec('git', ['rev-list', '--tags', '--max-count=1'])])}`.replace('v', ''),
           unraid:this.#json?.unraid || false,

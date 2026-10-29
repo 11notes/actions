@@ -12,20 +12,20 @@ export default class Action{
   };
   #json = {};
 
-  inputs = {latest:Eleven.getInput('latest'), build:Eleven.getInput('build'), force:Eleven.getInput('force', false), etc:Eleven.getInput('etc', false)};
+  #inputs = {latest:Eleven.getInput('latest'), build:Eleven.getInput('build'), force:Eleven.getInput('force', false), etc:Eleven.getInput('etc', false)};
 
   constructor(){
-    Eleven.info('class Action initialized', this.inputs);
+    Eleven.info('class Action initialized', this.#inputs);
     Eleven.exportVariable(this.#etc.prefix, false);
   }
 
   async verify(){
-    const input = this.inputs.latest;
-    if(this.inputs.etc){
+    const input = this.#inputs.latest;
+    if(this.#inputs.etc){
       try{
-        this.inputs.etc = JSON.parse(this.inputs.etc);
+        this.#inputs.etc = JSON.parse(this.#inputs.etc);
       }catch(e){
-        this.inputs.etc = false;
+        this.#inputs.etc = false;
       }
     }
     return(Boolean(input && input.trim() !== '' && input.toLowerCase() !== 'null'));
@@ -33,35 +33,35 @@ export default class Action{
 
   async run(){
     this.#getCurrentVersion();
-    Eleven.info(`latest version is: ${this.inputs.latest}`);
-    if(!this.inputs.force && await this.#latestTagExists()){
+    Eleven.info(`latest version is: ${this.#inputs.latest}`);
+    if(!this.#inputs.force && await this.#latestTagExists()){
       Eleven.warning(`latest version exists already as a tag`);
       Eleven.exportVariable(`${this.#etc.prefix}_EXISTS`, true);
     }else{
-      if(this.inputs.force || semver.gt(this.inputs.latest, this.#json.semver.version)){
+      if(this.#inputs.force || semver.gt(this.#inputs.latest, this.#json.semver.version)){
         Eleven.info(`latest version does not exist as a tag yet and is higher than existing version, update needed`);
         let update = {
-          version:this.inputs.latest,
+          version:this.#inputs.latest,
           tag:`${await Eleven.exec('git', ['describe', '--abbrev=0', '--tags', await Eleven.exec('git', ['rev-list', '--tags', '--max-count=1'])])}`.replace('v', ''),
           unraid:this.#json?.unraid || false,
           nobody:this.#json?.nobody || false,
         };
-        if(null !== this.inputs.build){
-          update.build = this.inputs.build;
+        if(null !== this.#inputs.build){
+          update.build = this.#inputs.build;
         }
-        if(this.inputs.etc){
-          update = {...update, ...this.inputs.etc};
+        if(this.#inputs.etc){
+          update = {...update, ...this.#inputs.etc};
         }
         Eleven.exportVariable(this.#etc.prefix, true);
         Eleven.exportVariable(`${this.#etc.prefix}_BASE64JSON`, Buffer.from(JSON.stringify(update)).toString('base64'));
         for(const env in update){
           Eleven.exportVariable(`${this.#etc.prefix}_${env}`.toUpperCase(), update[env]);
         }
-        Eleven.info(update);
       }else{
         Eleven.warning(`latest version does not exist as a tag yet but is lower than the existing version, skipping`);
       }
     }
+    Eleven.info({inputs:this.#inputs, base64:update});
   }
 
   #getCurrentVersion(){
@@ -75,7 +75,7 @@ export default class Action{
   }
 
   async #latestTagExists(){
-    const response = await fetch(`https://hub.docker.com/v2/repositories/${this.#json.image}/tags/${this.inputs.latest}`);
+    const response = await fetch(`https://hub.docker.com/v2/repositories/${this.#json.image}/tags/${this.#inputs.latest}`);
     Eleven.info(`checking if latest version exists as a tag on docker hub: ${response.ok}`);
     return(response.ok);
   }

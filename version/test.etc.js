@@ -11,7 +11,7 @@ import { resolve } from 'node:path';
   process.env.DEBUG = true;
   process.env.GITHUB_WORKSPACE = process.cwd();
   process.env.INPUT_VERSION = '1.26.2';
-  process.env.INPUT_ETC = JSON.stringify({force: true, build:{args:{dashboard_versio:"2.99.9"}}});
+  process.env.INPUT_ETC = JSON.stringify({build:{args:{dashboard_versio:"2.99.9"}}});
 
   await import(bundlePath);
 })();

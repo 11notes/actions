@@ -50,7 +50,7 @@ export default class Action{
     for(const env in version){
       Eleven.exportVariable(`${this.#etc.prefix}_${env}`.toUpperCase(), version[env]);
     }
-    Eleven.info(version);
+    Eleven.info({inputs:this.#inputs, base64:version});
   }
 
   #loadJson(){

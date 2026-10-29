@@ -31110,7 +31110,7 @@ class Action{
     for(const env in version){
       Version_Eleven.exportVariable(`${this.#etc.prefix}_${env}`.toUpperCase(), version[env]);
     }
-    Version_Eleven.info(version);
+    Version_Eleven.info({inputs:this.#inputs, base64:version});
   }
 
   #loadJson(){

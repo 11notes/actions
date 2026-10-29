@@ -8,6 +8,9 @@ inputs:
   version:
     description: 'semver to build'
     required: true
+  etc:
+    description: 'JSON string of additional properties to be added to BASE64'
+    required: false
 runs:
   using: 'node24'
   main: 'dist/index.js'

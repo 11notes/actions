@@ -33825,14 +33825,18 @@ class Action{
 
   async run(){
     this.#getCurrentVersion();
-    Update_Eleven.info(`latest version is: ${this.#inputs.latest}`);
+    Update_Eleven.info(`latest version is: ${this.#inputs.latest}, force is set to: ${this.#inputs.force}`);
     let update = {};
     if(!this.#inputs.force && await this.#latestTagExists()){
       Update_Eleven.warning(`latest version exists already as a tag`);
       Update_Eleven.exportVariable(`${this.#etc.prefix}_EXISTS`, true);
     }else{
       if(this.#inputs.force || semver.gt(this.#inputs.latest, this.#json.semver.version)){
-        Update_Eleven.info(`latest version does not exist as a tag yet and is higher than existing version, update needed`);
+        if(this.#inputs.force){
+          Update_Eleven.info(`latest version ignored, update forced`);
+        }else{
+          Update_Eleven.info(`latest version does not exist as a tag yet and is higher than existing version, update needed`);
+        }
         update = {
           version:this.#inputs.latest,
           tag:`${await Update_Eleven.exec('git', ['describe', '--abbrev=0', '--tags', await Update_Eleven.exec('git', ['rev-list', '--tags', '--max-count=1'])])}`.replace('v', ''),

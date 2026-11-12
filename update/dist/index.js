@@ -33820,7 +33820,7 @@ class Action{
         this.#inputs.etc = false;
       }
     }
-    this.#inputs.latest = semver.coerce(this.#inputs.latest);
+    this.#inputs.latest = semver.valid(semver.coerce(this.#inputs.latest));
     return(Boolean(input && input.trim() !== '' && input.toLowerCase() !== 'null'));
   }
 
@@ -33865,7 +33865,7 @@ class Action{
   #getCurrentVersion(){
     try{
       this.#json = JSON.parse((0,external_node_fs_namespaceObject.readFileSync)(this.#etc.json).toString());
-      this.#json.semver.version = semver.coerce(this.#json.semver.version);
+      this.#json.semver.version = semver.valid(semver.coerce(this.#json.semver.version));
       Update_Eleven.info(`current version is: ${this.#json.semver.version}`);
       return(this.#json.semver.version);
     }catch(e){
